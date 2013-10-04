@@ -34,15 +34,20 @@ export GOPATH="$gopath"
 # build project
 go get -d $PROJECT
 
+# clone the specified ref
 cd $GOPATH/src/$PROJECT
 if [[ ! -z $REF ]]; then
   git fetch origin >/dev/null 2>&1
   git checkout $REF >/dev/null 2>&1
 fi
+
+# set up version
 if [ -f version.go ]; then
   sed -e "s/Version = \"dev\"/Version = \"${VERSION}\"/" version.go > /tmp/version.go
   cp /tmp/version.go version.go
 fi
+
+# compile
 go get .
 
 if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
