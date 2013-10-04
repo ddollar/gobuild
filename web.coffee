@@ -15,7 +15,6 @@ app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
   env =
     GOARCH:  req.params.arch
     GOOS:    req.params.os
-    HOST:    process.env.HOST
     REF:     req.params.ref
     VERSION: version
   ps = spawner.spawn "bin/build github.com/#{req.params.user}/#{req.params.repo}", env:env
