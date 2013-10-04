@@ -16,7 +16,7 @@ if [[ ! -d $root/vendor/go ]]; then
   rm -rf $goroot
   mkdir -p $goroot
   cd $goroot
-  curl -s http://gobuild-compilers.s3.amazonaws.com/go-1.1.2-${GOARCH}-${GOOS}.tgz | tar -xzf -
+  curl -s http://gobuild-compilers.s3.amazonaws.com/go-1.1.2-${GOOS}-${GOARCH}.tgz | tar -xzf -
   export GOROOT="$goroot"
 else
   export GOROOT="$root/vendor/go"
