@@ -1,0 +1,6 @@
+ul#platforms
+  each platform in platforms
+    - console.log('platform', platform);
+    li
+      a(href="/#{platform}/#{binary_name(platform)}")= platform
+

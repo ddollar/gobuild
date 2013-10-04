@@ -1,0 +1,4 @@
+/.anvil
+/.env
+/node_modules
+/vendor/go

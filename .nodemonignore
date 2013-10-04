@@ -1,0 +1,6 @@
+.git
+*.css
+*.jade
+*.js
+*.swp
+go/*

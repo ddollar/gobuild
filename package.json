@@ -1,0 +1,19 @@
+{
+  "name":    "gobuild",
+  "version": "0.0.1",
+
+  "dependencies": {
+    "async":         "0.2.x",
+    "coffee-script": "1.2.x",
+    "express":       "3.0.x",
+    "jade":          "0.35.x",
+    "nodemon":       "0.7.x",
+    "node-uuid":     "1.4.x",
+    "restler":       "2.0.x"
+  },
+
+  "engines": {
+    "node": "0.8.x",
+    "npm":  "1.2.x"
+  }
+}

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+ROOT=$(dirname $(dirname $0))
+PATH="node_modules/.bin:$PATH"
+COFFEE="$ROOT/node_modules/.bin/coffee"
+
+cd $ROOT
+
+if [ "${NODE_ENV}" == "development" ]; then
+  exec nodemon -w . web.coffee
+else
+  exec $COFFEE web.coffee
+fi

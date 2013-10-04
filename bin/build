@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# fail fast
+set -o errexit
+set -o pipefail
+
+# args
+PROJECT="$1"
+
+# determine root
+root=$(cd $(dirname $0)/..; pwd)
+
+# if there's no vendored go, download an appropriate one
+if [[ ! -d $root/vendor/go ]]; then
+  goroot=$(mktemp -t goroot_XXXXX)
+  rm -rf $goroot
+  mkdir -p $goroot
+  cd $goroot
+  curl -s http://gobuild-compilers.s3.amazonaws.com/go-1.1.2-${GOARCH}-${GOOS}.tgz | tar -xzf -
+  export GOROOT="$goroot"
+else
+  export GOROOT="$root/vendor/go"
+fi
+
+# make a tempdir to build in
+gopath=$(mktemp -t gopath_XXXXX)
+rm -rf $gopath
+mkdir -p $gopath
+
+# some vars for go
+export PATH="$GOROOT/bin:/app/vendor/bin:$PATH"
+export GOPATH="$gopath"
+
+# build project
+go get -d $PROJECT
+
+cd $GOPATH/src/$PROJECT
+if [[ ! -z $REF ]]; then
+  git fetch origin >/dev/null 2>&1
+  git checkout $REF >/dev/null 2>&1
+fi
+if [ -f version.go ]; then
+  sed -e "s/Version = \"dev\"/Version = \"${VERSION}\"/" version.go > /tmp/version.go
+  cp /tmp/version.go version.go
+fi
+go get .
+
+if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
+  cat $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)*
+else
+  cat $GOPATH/bin/$(echo $PROJECT | cut -d/ -f3)
+fi
