@@ -32,7 +32,7 @@ export PATH="$GOROOT/bin:/app/vendor/bin:$PATH"
 export GOPATH="$gopath"
 
 # build project
-go get -d $PROJECT
+go get -d $PROJECT >/tmp/build.log 2>&1
 
 # clone the specified ref
 cd $GOPATH/src/$PROJECT
