@@ -1,0 +1,46 @@
+#!/bin/bash
+
+VERSION="1.1.2"
+PLATFORMS="darwin-386 darwin-amd64 linux-arm linux-386 linux-amd64 windows-386 windows-amd64"
+SOURCE="https://go.googlecode.com/files/go${VERSION}.src.tar.gz"
+
+for platform in $PLATFORMS; do
+
+  buildpack=$(mktemp -t buildpack_XXXXX)
+  rm -rf $buildpack
+  mkdir -p $buildpack/bin
+
+	cat <<-EOF >$buildpack/bin/detect
+#!/bin/bash
+echo "Gobuild Compiler"
+EOF
+
+  cat <<-EOF >$buildpack/bin/compile
+#!/bin/bash
+ 
+root=\$(pwd)
+ 
+function go-crosscompile-build {
+  GOOS=\${1%-*}
+  GOARCH=\${1#*-}
+  cd \$root/go/src; GOOS=\${GOOS} GOARCH=\${GOARCH} ./make.bash --no-clean 2>&1
+}
+ 
+cd \$root/go/src
+./make.bash
+go-crosscompile-build ${platform}
+EOF
+
+  chmod +x $buildpack/bin/{detect,compile}
+
+  slug=$(anvil build -p -b $buildpack $SOURCE)
+
+  download=$(mktemp -t download)
+  rm -rf $download
+  mkdir -p $download
+
+  curl -L $slug -o $download/go-${VERSION}-${platform}.tgz
+
+  vendor/s3 put $S3_BUCKET go-${VERSION}-${platform}.tgz $download/go-${VERSION}-${platform}.tgz
+
+done
