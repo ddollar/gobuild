@@ -12,17 +12,20 @@ root=$(cd $(dirname $0)/..; pwd)
 
 # if there's no vendored go, download an appropriate one
 if [[ ! -d $root/vendor/go ]]; then
+  echo "Downloading go for $GOOS/$GOARCH"
   goroot=$(mktemp -t goroot_XXXXX)
   rm -rf $goroot
   mkdir -p $goroot
   cd $goroot
-  curl -s http://gobuild-compilers.s3.amazonaws.com/go-1.1.2-${GOOS}-${GOARCH}.tgz | tar -xzf - >/dev/null 2>&1
+  curl -s http://gobuild-compilers.s3.amazonaws.com/go-1.1.2-${GOOS}-${GOARCH}.tgz | tar -xzf -
   export GOROOT="$goroot/go"
 else
+  echo "Using vendored go"
   export GOROOT="$root/vendor/go"
 fi
 
 # make a tempdir to build in
+echo "Creating GOPATH"
 gopath=$(mktemp -t gopath_XXXXX)
 rm -rf $gopath
 mkdir -p $gopath
@@ -31,27 +34,38 @@ mkdir -p $gopath
 export PATH="$GOROOT/bin:/app/vendor/bin:$PATH"
 export GOPATH="$gopath"
 
-# build project
-go get -d $PROJECT >/tmp/build.log 2>&1
+# set up godeps
+if [ -f Godeps ]; then
+  go get github.com/kr/godep
+  alias go="$GOPATH/bin/godep go"
+fi
+
+# download project
+echo "Downloading $PROJECT"
+go get -d $PROJECT >/tmp/build.log
 
 # clone the specified ref
 cd $GOPATH/src/$PROJECT
 if [[ ! -z $REF ]]; then
-  git fetch origin >/dev/null 2>&1
-  git checkout $REF >/dev/null 2>&1
+  git fetch origin
+  git checkout $REF
 fi
 
 # set up version
+echo "Setting version to $VERSION"
 if [ -f version.go ]; then
   sed -e "s/Version = \"dev\"/Version = \"${VERSION}\"/" version.go > /tmp/version.go
   cp /tmp/version.go version.go
 fi
 
-# compile
+echo "Compiling"
 go get .
 
 if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
-  cat $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)*
+  BINARY="$(ls -1 $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)*)"
 else
-  cat $GOPATH/bin/$(echo $PROJECT | cut -d/ -f3)
+  BINARY="$GOPATH/bin/$(echo $PROJECT | cut -d/ -f3)"
 fi
+
+echo "Uploading binary"
+curl -X PUT $BUILD_HOST/build/$BUILD_ID/binary -T $BINARY

@@ -49,10 +49,10 @@ class Spawner
       rendezvous = tls.connect url.port, url.hostname, ->
         # work around invalid cert
         if true || rendezvous.authorized
-          console.log "valid socket"
           rendezvous.write url.pathname.substring(1) + "\n"
+          emitter.emit "connect"
         else
-          console.log "invalid socket"
+          emitter.emit "error", "could not connect to rendezvous"
 
       ping = setInterval (->
         try
@@ -62,7 +62,7 @@ class Spawner
           clearInterval ping
       ), 1000
 
-      rendezvous.on "data", (data) -> emitter.emit("data", data) unless data.toString() is "rendezvous\r\n"
+      rendezvous.on "data", (data) -> emitter.emit("data", data) unless data.toString() is "rendezvous\r\n" or data.toString() is " "
       rendezvous.on "end",         -> emitter.emit "end"; clearInterval ping
 
     request.on "error", (error) ->

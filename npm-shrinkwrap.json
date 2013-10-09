@@ -289,6 +289,17 @@
       "from": "node-uuid@1.4.1",
       "resolved": "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.1.tgz"
     },
+    "redis-url": {
+      "version": "0.2.0",
+      "from": "redis-url@",
+      "dependencies": {
+        "redis": {
+          "version": "0.8.6",
+          "from": "redis@>= 0.0.1",
+          "resolved": "https://registry.npmjs.org/redis/-/redis-0.8.6.tgz"
+        }
+      }
+    },
     "restler": {
       "version": "2.0.1",
       "from": "restler@2.0.1",
