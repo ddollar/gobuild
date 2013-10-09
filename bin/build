@@ -69,3 +69,5 @@ fi
 
 echo "Uploading binary"
 curl -X PUT $BUILD_HOST/build/$BUILD_ID/binary -T $BINARY
+
+sleep 5
