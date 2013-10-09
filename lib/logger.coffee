@@ -53,9 +53,6 @@ class Logger
   failure: (message, options={}) ->
     @write_status "failure", coffee.helpers.merge(options, message:message)
 
-  delay: (delay, options={}) ->
-    @write_status "delay", options
-
   error: (err, opts={}) ->
     id = uuid.v1().split("-")[0]
     options =
