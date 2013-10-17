@@ -35,6 +35,7 @@ app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
   log.start "build", id:id.split("-").pop(), version:version, project:"#{req.params.user}/#{req.params.repo}", (log) ->
     log.write_status "start"
     res.writeHead 200, "Content-Type":"application/octet-stream", "Build-Id":id
+    # giant hack to make node send the headers early
     res._send("")
     env =
       BUILD_ID:   id
