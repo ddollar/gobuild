@@ -60,7 +60,7 @@ app.get "/build/:id/output", (req, res) ->
 app.post "/build/:id/binary", (req, res) ->
   id = req.params.id
   req.on "data", (data) -> writer.publish "build:#{id}:data", data.toString("base64")
-  req.on "end",         -> writer.publish "build:#{id}:end", ""; res.end()
+  req.on "end",         -> res.send "ok"
 
 app.post "/build/:id/exit", (req, res) ->
   id = req.params.id
