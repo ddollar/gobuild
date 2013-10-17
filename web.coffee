@@ -25,6 +25,7 @@ reader.on "message", (channel, message) ->
       res.end()
       reader.unsubscribe "build:#{id}:data"
       reader.unsubscribe "build:#{id}:end"
+      delete builds[id]
 
 app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
   id = uuid.v4()
