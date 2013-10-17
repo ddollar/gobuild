@@ -44,7 +44,7 @@ app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
       PATH:       "/usr/local/bin:/usr/bin:/bin"
       REF:        req.params.ref
       VERSION:    version
-    ps = spawner.spawn "bin/build github.com/#{req.params.user}/#{req.params.repo}", env:env
+    ps = spawner.spawn "bin/build-capture github.com/#{req.params.user}/#{req.params.repo}", env:env
     ps.on "connect",     -> log.write_status "connected"
     ps.on "data", (data) ->
       writer.append "build:#{id}:output", data.toString()
