@@ -68,6 +68,4 @@ else
 fi
 
 echo "Uploading binary"
-curl -X PUT $BUILD_HOST/build/$BUILD_ID/binary -T $BINARY
-
-sleep 5
+curl -X POST $BUILD_HOST/build/$BUILD_ID/binary -T $BINARY

@@ -57,9 +57,15 @@ app.get "/build/:id/output", (req, res) ->
   reader.get "build:#{req.params.id}:output", (err, output) ->
     res.send output
 
-app.put "/build/:id/binary", (req, res) ->
+app.post "/build/:id/binary", (req, res) ->
   id = req.params.id
   req.on "data", (data) -> writer.publish "build:#{id}:data", data.toString("base64")
   req.on "end",         -> writer.publish "build:#{id}:end", ""; res.end()
+
+app.post "/build/:id/exit", (req, res) ->
+  id = req.params.id
+  console.log "body", req.body
+  writer.publish "build:#{id}:end"
+  res.send "ok"
 
 app.start (port) -> console.log "listening on #{port}"
