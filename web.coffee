@@ -67,7 +67,7 @@ app.post "/build/:id/binary", (req, res) ->
 app.post "/build/:id/exit", (req, res) ->
   id = req.params.id
   console.log "body", req.body
-  writer.publish "build:#{id}:end"
+  writer.publish "build:#{id}:end", ""
   res.send "ok"
 
 app.start (port) -> console.log "listening on #{port}"
