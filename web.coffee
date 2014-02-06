@@ -40,6 +40,7 @@ app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
     env =
       BUILD_ID:   id
       BUILD_HOST: process.env.BUILD_HOST
+      COMPILER_BUCKET: process.env.COMPILER_BUCKET
       GOARCH:     req.params.arch
       GOOS:       req.params.os
       PATH:       "/usr/local/bin:/usr/bin:/bin"
