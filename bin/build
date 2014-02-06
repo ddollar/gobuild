@@ -17,7 +17,7 @@ if [[ ! -d $root/vendor/go ]]; then
   rm -rf $goroot
   mkdir -p $goroot
   cd $goroot
-  curl -s http://gobuild-compilers.s3.amazonaws.com/go-1.1.2-${GOOS}-${GOARCH}.tgz | tar -xzf -
+  curl -s http://$COMPILER_BUCKET/go-1.1.2-${GOOS}-${GOARCH}.tgz | tar -xzf -
   export GOROOT="$goroot/go"
 else
   echo "Using vendored go"
