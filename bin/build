@@ -17,7 +17,7 @@ if [[ ! -d $root/vendor/go ]]; then
   rm -rf $goroot
   mkdir -p $goroot
   cd $goroot
-  curl -s http://$COMPILER_BUCKET/go-1.1.2-${GOOS}-${GOARCH}.tgz | tar -xzf -
+  curl -s http://${COMPILER_BUCKET}.s3.amazonaws.com/go-${GOVERSION}-${GOOS}-${GOARCH}.tgz | tar -xzf -
   export GOROOT="$goroot/go"
 else
   echo "Using vendored go"
@@ -38,6 +38,11 @@ export GOPATH="$gopath"
 if [ -f Godeps ]; then
   go get github.com/kr/godep
   alias go="$GOPATH/bin/godep go"
+fi
+
+if [ [  "$KEY" != "" ] && [ "$SPAWN_ENV" != "local" ]; then
+  mkdir ~/.ssh
+  curl $KEY -o ~/.ssh/id_rsa
 fi
 
 # download project

@@ -43,6 +43,8 @@ app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
       COMPILER_BUCKET: process.env.COMPILER_BUCKET
       GOARCH:     req.params.arch
       GOOS:       req.params.os
+      GOVERSION:  process.env.GOVERSION
+      KEY:        req.query.key
       PATH:       "/usr/local/bin:/usr/bin:/bin"
       REF:        req.params.ref
       VERSION:    version
