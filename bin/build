@@ -41,8 +41,9 @@ if [ -f Godeps ]; then
 fi
 
 if [ [  "$KEY" != "" ] && [ "$SPAWN_ENV" != "local" ]; then
+  echo "Downloading key"
   mkdir ~/.ssh
-  curl $KEY -o ~/.ssh/id_rsa
+  curl -s $KEY -o ~/.ssh/id_rsa
 fi
 
 # download project
