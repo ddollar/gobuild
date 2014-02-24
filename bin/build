@@ -40,7 +40,7 @@ if [ -f Godeps ]; then
   alias go="$GOPATH/bin/godep go"
 fi
 
-if [[  "$KEY" != "" ]] && [[ "$SPAWN_ENV" != "local" ]]; then
+if [[ "$KEY" != "" && "$SPAWN_ENV" != "local" ]]; then
 
   echo "Downloading key"
   mkdir -p ~/.ssh
@@ -85,6 +85,10 @@ if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
 else
   BINARY="$GOPATH/bin/$(echo $PROJECT | cut -d/ -f3)"
 fi
+
+echo "Recording size"
+SIZE=$(wc -c <$BINARY | tr -d ' ')
+curl -s -X POST $BUILD_HOST/build/$BUILD_ID/size -d size=$SIZE >/dev/null
 
 echo "Uploading binary"
 curl -s -X POST $BUILD_HOST/build/$BUILD_ID/binary -T $BINARY
