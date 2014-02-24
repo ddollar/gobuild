@@ -22,8 +22,7 @@ reader.on "message", (channel, message) ->
   return unless res
   switch channel
     when "size"
-      res.writeHead 200, "Content-Type":"application/octet-stream", "Build-Id":id, "Content-Length":message
-      res._send("")
+      res.addTrailers "Content-Length":message
       sizes[id].send "ok"
     when "data"
       res.write new Buffer(message, "base64")
@@ -41,6 +40,8 @@ app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
   log.start "build", id:id.split("-").pop(), version:version, project:"#{req.params.user}/#{req.params.repo}", (log) ->
     log.write_status "start"
     # giant hack to make node send the headers early
+    res.writeHead 200, "Content-Type":"application/octet-stream", "Build-Id":id
+    res._send("")
     env =
       BUILD_ID:   id
       BUILD_HOST: process.env.BUILD_HOST
