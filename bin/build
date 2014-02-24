@@ -40,7 +40,7 @@ if [ -f Godeps ]; then
   alias go="$GOPATH/bin/godep go"
 fi
 
-if [ [  "$KEY" != "" ] && [ "$SPAWN_ENV" != "local" ]; then
+if [[  "$KEY" != "" ]] && [[ "$SPAWN_ENV" != "local" ]]; then
   echo "Downloading key"
   mkdir ~/.ssh
   curl -s $KEY -o ~/.ssh/id_rsa
