@@ -5,4 +5,4 @@ root=$(cd $(dirname $0)/..; pwd)
 $root/bin/build $*
 exitcode=$?
 
-curl -X POST $BUILD_HOST/build/$BUILD_ID/exit --data $exitcode
+curl -s -X POST $BUILD_HOST/build/$BUILD_ID/exit --data $exitcode
