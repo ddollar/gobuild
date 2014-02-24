@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="1.1.2"
+VERSION="1.2"
 PLATFORMS="darwin-386 darwin-amd64 linux-arm linux-386 linux-amd64 windows-386 windows-amd64"
 SOURCE="https://go.googlecode.com/files/go${VERSION}.src.tar.gz"
 
@@ -41,6 +41,6 @@ EOF
 
   curl -L $slug -o $download/go-${VERSION}-${platform}.tgz
 
-  vendor/s3 put $S3_BUCKET go-${VERSION}-${platform}.tgz $download/go-${VERSION}-${platform}.tgz
+  vendor/bin/s3 put ${COMPILER_BUCKET} go-${VERSION}-${platform}.tgz $download/go-${VERSION}-${platform}.tgz
 
 done
