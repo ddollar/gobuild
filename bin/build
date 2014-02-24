@@ -41,16 +41,27 @@ if [ -f Godeps ]; then
 fi
 
 if [[  "$KEY" != "" ]] && [[ "$SPAWN_ENV" != "local" ]]; then
+
   echo "Downloading key"
   mkdir -p ~/.ssh
   chmod 700 ~/.ssh
   curl -s $KEY -o ~/.ssh/id_rsa
   chmod 400 ~/.ssh/id_rsa
-fi
 
-# download project
-echo "Downloading $PROJECT"
-go get -d $PROJECT >/tmp/build.log
+  echo "Disabling StrictHostKeyChecking"
+  echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
+  echo "Downloading $PROJECT"
+  mkdir -p $GOPATH/src/$PROJECT
+  cd $GOPATH/src/$PROJECT
+  git clone git@${PROJECT/\//:}.git .
+
+else
+
+  echo "Downloading $PROJECT"
+  go get -d $PROJECT >/tmp/build.log
+
+fi
 
 # clone the specified ref
 cd $GOPATH/src/$PROJECT
