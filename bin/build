@@ -42,8 +42,10 @@ fi
 
 if [[  "$KEY" != "" ]] && [[ "$SPAWN_ENV" != "local" ]]; then
   echo "Downloading key"
-  mkdir ~/.ssh
+  mkdir -p ~/.ssh
+  chmod 700 ~/.ssh
   curl -s $KEY -o ~/.ssh/id_rsa
+  chmod 400 ~/.ssh/id_rsa
 fi
 
 # download project
