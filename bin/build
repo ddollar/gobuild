@@ -87,4 +87,4 @@ else
 fi
 
 echo "Uploading binary"
-curl -X POST $BUILD_HOST/build/$BUILD_ID/binary -T $BINARY
+curl -s -X POST $BUILD_HOST/build/$BUILD_ID/binary -T $BINARY
