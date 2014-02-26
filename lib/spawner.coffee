@@ -33,7 +33,7 @@ class Spawner
     data = {}
     data["ps_env[#{key}]"] = ""  for key, val of process.env # nullify parent env
     data["ps_env[#{key}]"] = val for key, val of options.env # only add desired env
-    data["attach"] = "true"
+    data["attach"] = "false"
     data["command"] = command
     data["size"] = (process.env.DYNO_SIZE || "2")
 
