@@ -59,7 +59,7 @@ app.get "/:user/:repo/:ref/:os/:arch", (req, res) ->
       writer.append "build:#{id}:output", data.toString()
       for line in data.toString().replace(/\s+$/g, "").split("\n")
         log.write_status "output", line:line
-    ps.on "end",         -> log.write_status "end"; res.end()
+    ps.on "end",         -> log.write_status "end"
     reader.subscribe "build:#{id}:size"
     reader.subscribe "build:#{id}:data"
     reader.subscribe "build:#{id}:end"
