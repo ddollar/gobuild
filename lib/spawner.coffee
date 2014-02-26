@@ -45,25 +45,7 @@ class Spawner
       data: data
 
     request.on "success", (data) ->
-      url = require("url").parse(data.rendezvous_url)
-      rendezvous = tls.connect url.port, url.hostname, ->
-        # work around invalid cert
-        if true || rendezvous.authorized
-          rendezvous.write url.pathname.substring(1) + "\n"
-          emitter.emit "connect"
-        else
-          emitter.emit "error", "could not connect to rendezvous"
-
-      ping = setInterval (->
-        try
-          rendezvous.write " "
-        catch error
-          console.log "error writing to rendezvous"
-          clearInterval ping
-      ), 1000
-
-      rendezvous.on "data", (data) -> emitter.emit("data", data) unless data.toString() is "rendezvous\r\n" or data.toString() is " "
-      rendezvous.on "end",         -> emitter.emit "end"; clearInterval ping
+      emitter.emit "end"
 
     request.on "error", (error) ->
       emitter.emit "error", error
