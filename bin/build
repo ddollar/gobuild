@@ -32,12 +32,7 @@ mkdir -p $gopath
 
 # some vars for go
 export GOPATH="$gopath"
-export PATH="$GOPATH/bin:$GOROOT/bin:/app/vendor/bin:$PATH"
-
-# set up godeps
-if [ -f Godeps ]; then
-  go get github.com/tools/godep
-fi
+export PATH="$GOROOT/bin:/app/vendor/bin:$PATH"
 
 if [[ "$KEY" != "" && "$SPAWN_ENV" != "local" ]]; then
 
@@ -62,11 +57,19 @@ else
 
 fi
 
-# clone the specified ref
 cd $GOPATH/src/$PROJECT
+
+# clone the specified ref
 if [[ ! -z $REF ]]; then
   git fetch origin
   git checkout $REF
+fi
+
+# set up godeps
+if [ -f Godeps ]; then
+  echo "Installing godep"
+  env GOARCH= GOOS= go get github.com/tools/godep
+  export PATH="$GOPATH/bin:$PATH"
 fi
 
 echo "Compiling"
