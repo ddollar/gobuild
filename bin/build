@@ -36,8 +36,7 @@ export PATH="$GOPATH/bin:$GOROOT/bin:/app/vendor/bin:$PATH"
 
 # set up godeps
 if [ -f Godeps ]; then
-  go get github.com/kr/godep
-  alias go="$GOPATH/bin/godep go"
+  go get github.com/tools/godep
 fi
 
 if [[ "$KEY" != "" && "$SPAWN_ENV" != "local" ]]; then
