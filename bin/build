@@ -70,15 +70,8 @@ if [[ ! -z $REF ]]; then
   git checkout $REF
 fi
 
-# set up version
-echo "Setting version to $VERSION"
-if [ -f version.go ]; then
-  sed -e "s/Version = \"dev\"/Version = \"${VERSION}\"/" version.go > /tmp/version.go
-  cp /tmp/version.go version.go
-fi
-
 echo "Compiling"
-go get .
+make VERSION=$VERSION
 
 if [ -d $GOPATH/bin/${GOOS}_${GOARCH} ]; then
   BINARY="$(ls -1 $GOPATH/bin/${GOOS}_${GOARCH}/$(echo $PROJECT | cut -d/ -f3)*)"
