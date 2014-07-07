@@ -31,8 +31,8 @@ rm -rf $gopath
 mkdir -p $gopath
 
 # some vars for go
-export PATH="$GOROOT/bin:/app/vendor/bin:$PATH"
 export GOPATH="$gopath"
+export PATH="$GOPATH/bin:$GOROOT/bin:/app/vendor/bin:$PATH"
 
 # set up godeps
 if [ -f Godeps ]; then
